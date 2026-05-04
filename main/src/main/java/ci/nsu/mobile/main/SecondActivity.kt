@@ -1,37 +1,72 @@
 package ci.nsu.mobile.main
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
-import com.google.android.material.appbar.MaterialToolbar
-import ci.nsu.mobile.main.databinding.ActivitySecondBinding
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 
-class SecondActivity : AppCompatActivity() {
-
-    private lateinit var binding: ActivitySecondBinding
-
+class SecondActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding = ActivitySecondBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        // Получаем данные из Intent
+        val receivedData = intent.getStringExtra("EXTRA_DATA") ?: "No data"
 
-        val receivedData = intent.getStringExtra("KEY_DATA") ?: "Нет данных"
-        binding.textViewData.text = "Полученные данные: $receivedData"
-
-        setupTopBar()
-    }
-
-    private fun setupTopBar() {
-        val toolbar = findViewById<MaterialToolbar>(R.id.topAppBar)
-        setSupportActionBar(toolbar)
-
-        supportActionBar?.apply {
-            setDisplayHomeAsUpEnabled(true)
-            title = "Второй экран"
+        setContent {
+            SecondActivityScreen(
+                receivedData = receivedData,
+                onNavigateBack = { finish() }
+            )
         }
+    }
+}
 
-        toolbar.setNavigationOnClickListener {
-            finish()
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun SecondActivityScreen(
+    receivedData: String,
+    onNavigateBack: () -> Unit
+) {
+    MaterialTheme {
+        Scaffold(
+            topBar = {
+                TopAppBar(
+                    title = { Text("Second Activity") },
+                    navigationIcon = {
+                        IconButton(onClick = onNavigateBack) {
+                            Icon(
+                                imageVector = ArrowBack,
+                                contentDescription = "Back"
+                            )
+                        }
+                    }
+                )
+            }
+        ) { paddingValues ->
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues)
+                    .padding(16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+                Text(
+                    text = "Received Data:",
+                    style = MaterialTheme.typography.headlineMedium
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+                Text(
+                    text = receivedData,
+                    style = MaterialTheme.typography.bodyLarge
+                )
+            }
         }
     }
 }
