@@ -28,6 +28,7 @@ android {
         }
     }
     buildFeatures {
+        viewBinding = true
         compose = true // ️ Включает поддержку Compose
     }
     compileOptions {
@@ -60,4 +61,10 @@ dependencies {
 
     // Активность для Compose
     implementation("androidx.activity:activity-compose:1.9.2")
+    // Navigation Component
+    implementation("androidx.navigation:navigation-fragment-ktx:2.7.7")
+    implementation("androidx.navigation:navigation-ui-ktx:2.7.7")
+
+// Material Design (если ещё нет)
+    implementation("com.google.android.material:material:1.11.0")
 }
