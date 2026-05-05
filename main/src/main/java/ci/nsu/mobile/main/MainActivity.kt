@@ -63,7 +63,8 @@ fun ColorAppScreen() {
         Button(
             onClick = {
                 val trimmed = inputText.trim()
-                val found = colorMap[trimmed]
+                val formatted = trimmed.lowercase().replaceFirstChar { it.uppercase() }
+                val found = colorMap[formatted]
                 if (found != null) {
                     buttonColor = found
                 } else {
